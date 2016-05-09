@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!-- This document was created with Syntext Serna Free. --><!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "docbookV4.4/docbookx.dtd" []>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "docbookV4.4/docbookx.dtd" []>
 <preface>
   <title>Acerca de esta Guía</title>
   <para>La documentación de DHIS2 es un esfuerzo colectivo y ha sido elaborada por el equipo de desarrollo y los usuarios. Al mismo tiempo esta guía quiere ser completa, y sin embargo todavía falta incluir algunas funcionalidades. En esta sección se explican algunas de las convenciones utilizadas en el documento. </para>
@@ -23,6 +23,6 @@
   <para><programlisting>Las líneas de programas suelen contener algún código de programación.
     Se mostrarán dentro de un cuadro sombreado y con un tipo de fuente diferente, como este.</programlisting></para>
   <para><command>Los comandos se mostrarán en texto en negrita, y representan un comando que necesita ser ejecutado en el sistema operativo o en la base de datos.</command></para>
-  <para>Los enlaces a sitios web externos o las referencias cruzadas se mostrarán en texto azul y subrayado como <ulink url="http://www.dhis2.org">este.</ulink>.</para>
+  <para>Los enlaces a sitios web externos o las referencias cruzadas se mostrarán en texto azul y subrayado como <link xl:href="http://www.dhis2.org">este.</link>.</para>
   <para>Las referencias bibliográficas se mostrarán entre corchetes como esta: <citation>Store2007</citation>. Podremos encontrar una referencia completa en la bibliografía incluida al final de este documento. </para>
 </preface>

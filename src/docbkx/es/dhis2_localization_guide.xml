@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!-- This document was created with Syntext Serna Free. --><!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "docbookV4.4/docbookx.dtd" []>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "docbookV4.4/docbookx.dtd" []>
 <chapter>
   <title>Conceptos para la adaptación local</title>
   <para>La localización implica la adaptación de una aplicación en otro ámbito local. Cuando implementamos DHIS2 en un determinado país, será preciso asignar los recursos adecuados para traducir la apliación cuando sea necesario. Deberemos considerar la traducción de elementos de la interfaz de usuario, mensajes, apariencia, formatos de fecha y hora, moneda y otros aspectos. DHIS2 soporta la internacionalización del interfaz de usuario (i18n) mediante el uso de strings de propiedad de Java. Cada elemento del interfaz de usuario tiene asignado una clave específica, que está enlazada a un valor.</para>
@@ -67,7 +67,7 @@ error_occurred=An error has occurred.</programlisting>
   <section>
     <title>Detalles a tener en mente</title>
     <simplelist>
-      <member>Hay ciertos strings como &quot;yyyy-MM-dd&quot; que se usan para el formato de fecha y hora en la aplicación. En general, no deberían cambiarse, pero hay situaciones en que necesitamos adaptarlos localmente. Consultaremos este <ulink url="http://docs.oracle.com/javase/tutorial/i18n/format/simpleDateFormat.html">enlace</ulink> para más información.</member>
+      <member>Hay ciertos strings como &quot;yyyy-MM-dd&quot; que se usan para el formato de fecha y hora en la aplicación. En general, no deberían cambiarse, pero hay situaciones en que necesitamos adaptarlos localmente. Consultaremos este <link xl:href="http://docs.oracle.com/javase/tutorial/i18n/format/simpleDateFormat.html">enlace</link> para más información.</member>
       <member>No es necesario traducir un string del lenguaje original (inglés) si el string traducido es el mismo. Podemos dejarlo en blanco. Por defecto, DHIS2 utilizará los valores en inglés para todos los strings que no han sido traducidos. </member>
       <member>Todos los strings traducidos deben introducirse en formato UTF-8. Si estamos utilizando el portal de traducción, nos aseguraremos de que la configuración del navegador están fijadas a UTF-8 al momento de traducir.</member>
       <member>Algunas variables especiales (por ejemplo {0}) utilizan llaves. Esto significa que la variable se sustituye por un número u otro valor en la aplicación. Deberemos ubicar la notación de esta variable en la posición correcta.</member>

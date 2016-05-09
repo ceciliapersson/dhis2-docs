@@ -1,6 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"[]>
-<chapter>
+ <chapter version="5.0"
+         xsi:schemaLocation="http://docbook.org/ns/docbook http://www.docbook.org/xml/5.0/xsd/docbook.xsd"
+          xmlns="http://docbook.org/ns/docbook"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:xs="http://www.w3.org/2001/XMLSchema"
+         xmlns:xl="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:xhtml="http://www.w3.org/1999/xhtml"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mth="http://www.w3.org/1998/Math/MathML"
+         xmlns:db="http://docbook.org/ns/docbook">
   <title>Installation</title>
   <para>The installation chapter provides information on how to install DHIS 2 in various contexts, including online central server, offline local network, standalone application and self-contained package called DHIS 2 Live.</para>
   <section>
@@ -69,6 +78,16 @@
       <screen>sudo passwd -l root</screen>
     </section>
     <section>
+      <title>Creating the configuration directory</title>
+      <para>Start by creating a suitable directory for the DHIS 2 configuration files. This
+        directory will also be used for apps, files and log files. An example directory could
+        be:<screen>/home/dhis/config</screen></para>
+      <para>DHIS 2 will look for an environment variable called <emphasis>DHIS2_HOME</emphasis> to
+        locate the DHIS 2 configuration directory. This directory will be referred to as
+          <emphasis>DHIS2_HOME</emphasis> in this installation guide. We will define the environment
+        variable in a later step in the installation process.</para>
+    </section>
+    <section>
       <title>Setting server time zone and locale (optional)</title>
       <para>It may be necessary to reconfigure the time zone of the server to match the time zone of
         the location which the DHIS 2 server will be covering. If you are using a virtual private
@@ -83,8 +102,11 @@ sudo locale-gen nb_NO.UTF-8</screen>
     </section>
     <section>
       <title>PostgreSQL installation</title>
-      <para>Install PostgreSQL 9.3 by invoking:</para>
-      <screen>sudo apt-get install postgresql-9.3</screen>
+      <para>Install PostgreSQL 9.4 by invoking:</para>
+      <screen>sudo apt-get install postgresql-9.4</screen>
+      <para><emphasis>Note:</emphasis> Alternatively, you can consult the PostgreSQL documentation to
+        install the latest version from the PostgreSQL APT repository:
+          <link>http://www.postgresql.org/download/linux/ubuntu/</link>.</para>
       <para>Switch to the postgres user by invoking:</para>
       <screen>sudo su postgres</screen>
       <para>Create a non-privileged user called <emphasis role="italic">dhis</emphasis> by
@@ -97,7 +119,15 @@ sudo locale-gen nb_NO.UTF-8</screen>
           >dhis2</emphasis>.</para>
     </section>
     <section>
-      <title>PostgreSQL performance tuning</title>
+      <title>PostGIS installation</title>
+      <para>In order to take advantage of the GIS clustering functionality introduced in DHIS 2.23
+        you must install the PostGIS extender on the server. After installing the extender, PostGIS
+        will be installed in the database automatically when DHIS 2 is started. Install PostGIS on
+        the server by invoking:</para>
+      <screen>sudo apt-get install postgresql-9.4 postgresql-9.4-postgis-2.2 postgresql-contrib-9.4</screen>
+    </section>
+    <section>
+      <title>PostgreSQL performance tuning (optional)</title>
       <para>Tuning PostgreSQL is necessary to achieve a high-performing system but is optional in
         terms of getting DHIS 2 to run. PostgreSQL is configured and tuned through the <emphasis
           role="italic">postgresql.conf</emphasis> file which can be edited like this:</para>
@@ -141,9 +171,10 @@ sudo locale-gen nb_NO.UTF-8</screen>
     <section>
       <title>Database configuration</title>
       <para>The database connection information is provided to DHIS 2 through a configuration file
-        called <emphasis role="italic">dhis.conf</emphasis>. Create this file and save it in a
-        convenient location. A configuration file for PostgreSQL corresponding to the above setup
-        has these properties: </para>
+        called <emphasis role="italic">dhis.conf</emphasis>. Create this file and save it in the
+          <emphasis>DHIS2_HOME</emphasis> directory. As an example this location could
+        be:<screen>/home/dhis/config/dhis.conf</screen> A configuration file for PostgreSQL
+        corresponding to the above setup has these properties: </para>
       <para><screen># Hibernate SQL dialect
 connection.dialect = org.hibernate.dialect.PostgreSQLDialect
 
@@ -219,10 +250,37 @@ filestore.secret = xxxx</screen>
           adding support for more providers.</emphasis></para>
     </section>
     <section>
+      <title>Google service account configuration (optional)</title>
+      <para>DHIS 2 can connect to various Google service APIs. For instance, the DHIS 2 GIS
+        component can utilize the Google Earth Engine API to load map layers. In order to provide
+        API access tokens you must set up a Google service account and create a private key:</para>
+      <para>
+        <itemizedlist>
+          <listitem>
+            <para>Create a Google service account. Please consult the <link
+                xl:href="https://developers.google.com/identity/protocols/OAuth2ServiceAccount#overview"
+              >Google identify platform</link> documentation.</para>
+          </listitem>
+          <listitem>
+            <para>Visit the <link xl:href="https://console.cloud.google.com">Google cloud
+                console</link> and go to API Manager > Credentials > Create credentials > Service
+              account key. Select your service account and JSON as key type and click Create.</para>
+          </listitem>
+          <listitem>
+            <para>Rename the JSON key to <emphasis>dhis-google-auth.json</emphasis>.</para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>After downloading the key file, put the <emphasis>dhis-google-auth.json</emphasis> file
+        in the DHIS2_HOME directory (the same location as the <emphasis>dhis.conf</emphasis> file).
+        As an example this location could
+        be:<screen>/home/dhis/config/dhis-google-auth.json</screen></para>
+    </section>
+    <section>
       <title>Java installation</title>
-      <para>Oracle Java 8 JDK is the recommended Java option as it provides the greates operating
-        system support, including Ubuntu LTS 14.04. The webupd8team Java PPA provides the necessary
-        packages.</para>
+      <para>Oracle Java 8 JDK is the recommended Java option as it provides the greatest operating
+        system support including Ubuntu LTS 14.04. The <emphasis>webupd8team Java PPA</emphasis>
+        provides the necessary packages.</para>
       <screen>sudo add-apt-repository ppa:webupd8team/java
 sudo apt-get update
 sudo apt-get install oracle-java8-installer</screen>
@@ -265,9 +323,9 @@ export DHIS2_HOME=&apos;/home/dhis/config&apos;</screen></para>
   redirectPort="8443"
   URIEncoding="UTF-8" /></screen>
       <para>The next step is to download the DHIS 2 WAR file and place it into the webapps directory
-        of Tomcat. You can download the DHIS version 2.15 WAR release like this (replace 2.15 with
+        of Tomcat. You can download the DHIS version 2.23 WAR release like this (replace 2.23 with
         your preferred version if necessary):</para>
-      <screen>wget https://www.dhis2.org/download/releases/2.21/dhis.war</screen>
+      <screen>wget https://www.dhis2.org/download/releases/2.23/dhis.war</screen>
       <para>Move the WAR file into the Tomcat webapps directory. We want to call the WAR file
         ROOT.war in order to make it available at localhost directly without a context path:</para>
       <screen>mv dhis.war tomcat-dhis/webapps/ROOT.war</screen>
@@ -302,7 +360,7 @@ export DHIS2_HOME=&apos;/home/dhis/config&apos;</screen></para>
     </itemizedlist>
     <section>
       <title>Basic setup for nginx</title>
-      <para>We recommend using <ulink url="http://www.nginx.org">nginx</ulink>  as reverse proxy due to its low memory
+      <para>We recommend using <link xl:href="http://www.nginx.org">nginx</link>  as reverse proxy due to its low memory
         footprint and ease of use. To install invoke the following:</para>
       <screen>sudo apt-get install nginx</screen>
       <para>nginx can now be started, reloaded and stopped with the following commands:</para>
@@ -368,7 +426,7 @@ sudo /etc/init.d/nginx stop</screen></para>
         using a trusted certificate. This can be achieved through SSL which is an cryptographic
         communication protocol running on top of TCP/IP. First, install the required <emphasis role="italic">openssl</emphasis> library:</para>
       <screen>sudo apt-get install openssl</screen>
-      <para>To configure nginx to use SSL you will need a proper SSL certificate from an SSL provider. The cost of a certificate varies a lot depending on encryption strength. An affordable certificate from <ulink url="http://www.rapidsslonline.com">Rapid SSL Online</ulink> should serve most purposes. To generate the CSR (certificate signing request) you can invoke the  command below. When you are prompted for the <emphasis role="italic">Common Name</emphasis>, enter the fully qualified domain name for the site you are securing.</para>
+      <para>To configure nginx to use SSL you will need a proper SSL certificate from an SSL provider. The cost of a certificate varies a lot depending on encryption strength. An affordable certificate from <link xl:href="http://www.rapidsslonline.com">Rapid SSL Online</link> should serve most purposes. To generate the CSR (certificate signing request) you can invoke the  command below. When you are prompted for the <emphasis role="italic">Common Name</emphasis>, enter the fully qualified domain name for the site you are securing.</para>
       <screen>openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr</screen>
       <para>When you have received your certificate files (.pem or .crt) you will need to place it
         together with the generated server.key file in a location which is reachable by nginx. A
@@ -759,8 +817,8 @@ ldap.search.filter = (cn={0})</screen>
             of Java from the Oracle Web site. Scroll down to the "Java Cryptography Extension (JCE)
             Unlimited Strength Jurisdiction Policy Files" section. It is important that the version
             of the files match the version of Java on your server.</para>
-          <para><ulink url="http://www.oracle.com/technetwork/java/javase/downloads/index.htm"
-              >http://www.oracle.com/technetwork/java/javase/downloads/index.html</ulink></para>
+          <para><link xl:href="http://www.oracle.com/technetwork/java/javase/downloads/index.htm"
+              >http://www.oracle.com/technetwork/java/javase/downloads/index.html</link></para>
         </listitem>
         <listitem>
           <para>Extract the downloaded ZIP archive. It contains two JAR files: <emphasis
